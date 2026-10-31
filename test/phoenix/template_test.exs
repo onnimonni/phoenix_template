@@ -54,6 +54,10 @@ defmodule Phoenix.TemplateTest do
       end
     end)
 
+    resources = Phoenix.TemplateTest.RelocatedTemplates.__info__(:attributes)[:external_resource]
+    assert [_ | _] = resources
+    assert Enum.all?(resources, &(Path.type(&1) == :relative))
+
     File.cp_r!(original, copy)
 
     File.cd!(copy, fn ->

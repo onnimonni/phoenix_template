@@ -425,7 +425,8 @@ defmodule Phoenix.Template do
     quote bind_quoted: binding() do
       for {path, name, body} <-
             Phoenix.Template.__compile_all__(__MODULE__, converter, root, pattern, engines) do
-        @external_resource path
+        # Relative to the project, like __mix_recompile__?/0, see __compile_all__/5
+        @external_resource Path.relative_to_cwd(path)
         @file path
         def unquote(String.to_atom(name))(var!(assigns)) do
           _ = var!(assigns)
